@@ -6,7 +6,6 @@
 #define MAT_LENGTH 3
 #define MAT_SQUARE MAT_LENGTH*MAT_LENGTH
 
-
 int matrix_A[MAT_SQUARE] = {9,15,37,1,93,7,108,117,203};
 int matrix_B[MAT_SQUARE] = {115,197,6,7,5,11,113,19,17};
 int matrix_C[MAT_SQUARE];
@@ -34,7 +33,8 @@ void rank2TensorMultOpenMP()
 	for(int index = 0; index < MAT_SQUARE; index ++)
 	{
 		printf("%d ",matrix_C[index]);
-		if(index % MAT_LENGTH == MAT_LENGTH - 1) printf("\n");
+		if(index % MAT_LENGTH == MAT_LENGTH - 1) 
+			printf("\n");
 	}
 }
 
@@ -48,6 +48,5 @@ int indexMultiplication(int index)
 		int col_offset = (index % MAT_LENGTH);
 		sum += matrix_A[row + row_offset] * matrix_B[col + col_offset];		
 	}
-
 	return sum;
 }
