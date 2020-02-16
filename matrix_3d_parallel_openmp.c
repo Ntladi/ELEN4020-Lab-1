@@ -7,9 +7,9 @@
 #define MAT_SQUARE MAT_LENGTH*MAT_LENGTH
 #define MAT_DEPTH 2
 
-int matrix_A[2][9] = {{9,15,37,1,93,7,108,117,203},{1,90,3,66,7,43,8,3,5}};
-int matrix_B[2][9] = {{115,197,6,7,5,11,113,19,17},{87,76,3,56,2,36,85,26,3}};
-int matrix_C[2][9];
+int matrix_A[MAT_DEPTH][MAT_SQUARE] = {{9,15,37,1,93,7,108,117,203},{1,90,3,66,7,43,8,3,5}};
+int matrix_B[MAT_DEPTH][MAT_SQUARE] = {{115,197,6,7,5,11,113,19,17},{87,76,3,56,2,36,85,26,3}};
+int matrix_C[MAT_DEPTH][MAT_SQUARE];
 
 void rank3TensorMultOpenMP();
 void rank2TensorMultOpenMP(int depth);
