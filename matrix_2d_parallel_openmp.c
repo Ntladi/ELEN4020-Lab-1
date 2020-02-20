@@ -12,10 +12,12 @@ int matrix_C[MAT_SQUARE];
 
 void rank2TensorMultOpenMP();
 int indexMultiplication(int index);
+void printMatrix();
 
 void main(void)
 {
-	rank2TensorMultOpenMP();	
+	rank2TensorMultOpenMP();
+	printMatrix();
 }
 
 void rank2TensorMultOpenMP()
@@ -30,12 +32,7 @@ void rank2TensorMultOpenMP()
 			matrix_C[index] = indexMultiplication(index);
 	}
 
-	for(int index = 0; index < MAT_SQUARE; index ++)
-	{
-		printf("%d ",matrix_C[index]);
-		if(index % MAT_LENGTH == MAT_LENGTH - 1) 
-			printf("\n");
-	}
+
 }
 
 int indexMultiplication(int index)
@@ -49,4 +46,14 @@ int indexMultiplication(int index)
 		sum += matrix_A[row + row_offset] * matrix_B[col + col_offset];		
 	}
 	return sum;
+}
+
+void printMatrix()
+{
+	for(int index = 0; index < MAT_SQUARE; index ++)
+	{
+		printf("%d ",matrix_C[index]);
+		if(index % MAT_LENGTH == MAT_LENGTH - 1) 
+			printf("\n");
+	}	
 }
