@@ -1,40 +1,71 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <omp.h>
+#include "populate.h"
 
-#define NUM_THREADS 4
-#define MAT_LENGTH 3
+#define NUM_THREADS 1
+#define MAT_LENGTH 10000
 #define MAT_SQUARE MAT_LENGTH*MAT_LENGTH
 #define MAT_DEPTH 2
 
-int matrix_A[MAT_DEPTH][MAT_SQUARE] = {{9,15,37,1,93,7,108,117,203},{1,90,3,66,7,43,8,3,5}};
-int matrix_B[MAT_DEPTH][MAT_SQUARE] = {{115,197,6,7,5,11,113,19,17},{87,76,3,56,2,36,85,26,3}};
-int matrix_C[MAT_DEPTH][MAT_SQUARE];
+int **matrix_A;
+int **matrix_B;
+int **matrix_C;
 
 void rank3TensorMultOpenMP();
 void rank2TensorMultOpenMP(int depth);
-int indexMultiplication(int index, int depth);
+void indexMultiplication(int index, int depth);
 
 void main(void)
 {
+	matrix_A = (int **)malloc(MAT_DEPTH * sizeof(int*));
+	matrix_B = (int **)malloc(MAT_DEPTH * sizeof(int*));
+	matrix_C = (int **)malloc(MAT_DEPTH * sizeof(int*));
+
+	for (int index = 0; index < MAT_DEPTH; index++)
+	{
+		matrix_A[index] = (int *)malloc(MAT_SQUARE*sizeof(int));
+		matrix_B[index] = (int *)malloc(MAT_SQUARE*sizeof(int));
+		matrix_C[index] = (int *)malloc(MAT_SQUARE*sizeof(int));
+	}
+
+	populate_3D(matrix_A,matrix_B,MAT_LENGTH,MAT_DEPTH);
+
+	clock_t start, end;
+	double cpu_time_used;
+
+	start = clock();
+
 	rank3TensorMultOpenMP();
+
+	end = clock();
+	cpu_time_used = ((double) (end - start)) / CLOCKS_PER_SEC;
+
+	printf("time taken is %f", cpu_time_used);
+
+	// printf("This is Matrix A\n");
+	// print3D(matrix_A,MAT_LENGTH,MAT_DEPTH);
+	// printf("This is Matrix B\n");
+	// print3D(matrix_B,MAT_LENGTH,MAT_DEPTH);
+	// printf("This is Matrix C\n");
+	// print3D(matrix_C,MAT_LENGTH,MAT_DEPTH);
+
+	for (int index = 0; index < MAT_DEPTH; index++)
+	{
+		free(matrix_A[index]);
+		free(matrix_B[index]);
+		free(matrix_C[index]);
+	}
+
+	free(matrix_A);
+	free(matrix_B);
+	free(matrix_C);
 }
 
 void rank3TensorMultOpenMP()
 {
 	for(int depth = 0; depth < MAT_DEPTH; depth ++)
 		rank2TensorMultOpenMP(depth);
-
-	for(int depth = 0; depth < MAT_DEPTH; depth ++)
-	{
-		for(int index = 0; index < MAT_SQUARE; index ++)
-		{
-			printf("%d ",matrix_C[depth][index]);
-			if(index % MAT_LENGTH == MAT_LENGTH - 1) printf("\n");
-		}
-
-		printf("\n");
-	}
 }
 
 
@@ -47,11 +78,11 @@ void rank2TensorMultOpenMP(int depth)
 		int threads_given = omp_get_num_threads();
 
 		for(int index = thread_id; index < MAT_SQUARE; index += threads_given)
-			matrix_C[depth][index] = indexMultiplication(index, depth);
+			indexMultiplication(index, depth);
 	}
 }
 
-int indexMultiplication(int index, int depth)
+void indexMultiplication(int index, int depth)
 {
 	int sum = 0;
 
@@ -62,5 +93,5 @@ int indexMultiplication(int index, int depth)
 		sum += matrix_A[depth][row + row_offset] * matrix_B[depth][col + col_offset];		
 	}
 
-	return sum;
+	matrix_C[depth][index] =  sum;
 }
