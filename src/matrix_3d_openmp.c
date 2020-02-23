@@ -3,10 +3,10 @@
 #include <omp.h>
 #include "populate.h"
 
-#define NUM_THREADS 1
-#define MAT_LENGTH 10000
-#define MAT_SQUARE MAT_LENGTH*MAT_LENGTH
-#define MAT_DEPTH 2
+int NUM_THREADS;
+int MAT_LENGTH;
+int MAT_SQUARE;
+int MAT_DEPTH;
 
 int **matrix_A;
 int **matrix_B;
@@ -16,8 +16,27 @@ void rank3TensorMultOpenMP();
 void rank2TensorMultOpenMP(int depth);
 void indexMultiplication(int index, int depth);
 
-void main(void)
+void main(int argc, char* argv[])
 {
+	if(argc > 1)
+	{
+		NUM_THREADS = atoi(argv[1]);
+		MAT_LENGTH = atoi(argv[2]);
+		MAT_DEPTH = atoi(argv[2]);
+	}
+	else
+	{
+		printf("No thread count or matrix length entered.\n");
+		printf("The default values (threads = 1, length = 10)\n");
+		printf("will be used instead\n\n");
+		NUM_THREADS = 1;
+		MAT_LENGTH = 10;
+		MAT_DEPTH = 10;
+	}
+
+
+	MAT_SQUARE = MAT_LENGTH*MAT_LENGTH;
+
 	matrix_A = (int **)malloc(MAT_DEPTH * sizeof(int*));
 	matrix_B = (int **)malloc(MAT_DEPTH * sizeof(int*));
 	matrix_C = (int **)malloc(MAT_DEPTH * sizeof(int*));
@@ -31,23 +50,13 @@ void main(void)
 
 	populate_3D(matrix_A,matrix_B,MAT_LENGTH,MAT_DEPTH);
 
-	clock_t start, end;
-	double cpu_time_used;
-
-	start = clock();
-
 	rank3TensorMultOpenMP();
 
-	end = clock();
-	cpu_time_used = ((double) (end - start)) / CLOCKS_PER_SEC;
-
-	printf("time taken is %f", cpu_time_used);
-
-	// printf("This is Matrix A\n");
+	// printf("Matrix A\n");
 	// print3D(matrix_A,MAT_LENGTH,MAT_DEPTH);
-	// printf("This is Matrix B\n");
+	// printf("Matrix B\n");
 	// print3D(matrix_B,MAT_LENGTH,MAT_DEPTH);
-	// printf("This is Matrix C\n");
+	// printf("Matrix C\n");
 	// print3D(matrix_C,MAT_LENGTH,MAT_DEPTH);
 
 	for (int index = 0; index < MAT_DEPTH; index++)

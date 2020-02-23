@@ -1,3 +1,6 @@
+#ifndef POPULATE_H
+#define POPULATE_H
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
@@ -44,3 +47,5 @@ void print3D(int **mat, int length, int depth)
 		print2D(mat[index],length);
 	}
 }
+
+#endif

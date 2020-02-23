@@ -3,9 +3,9 @@
 #include <omp.h>
 #include "populate.h"
 
-#define NUM_THREADS 2
-#define MAT_LENGTH 5
-#define MAT_SQUARE MAT_LENGTH*MAT_LENGTH
+int NUM_THREADS;
+int MAT_LENGTH;
+int MAT_SQUARE;
 
 int *matrix_A;
 int *matrix_B;
@@ -14,8 +14,24 @@ int *matrix_C;
 void rank2TensorMultOpenMP();
 void indexMultiplication(int index);
 
-void main(void)
+void main(int argc, char* argv[])
 {
+	if(argc > 1)
+	{
+		NUM_THREADS = atoi(argv[1]);
+		MAT_LENGTH = atoi(argv[2]);
+	}
+	else
+	{
+		printf("No thread count or matrix length entered.\n");
+		printf("The default values (threads = 1, length = 10)\n");
+		printf("will be used instead\n\n");
+		NUM_THREADS = 1;
+		MAT_LENGTH = 10;
+	}
+
+	MAT_SQUARE = MAT_LENGTH*MAT_LENGTH;
+
 	matrix_A = (int *)malloc(MAT_SQUARE * sizeof(int));
 	matrix_B = (int *)malloc(MAT_SQUARE * sizeof(int));
 	matrix_C = (int *)malloc(MAT_SQUARE * sizeof(int));
@@ -23,16 +39,14 @@ void main(void)
 	populate_2D(matrix_A,matrix_B,MAT_LENGTH);
 
 	rank2TensorMultOpenMP();
-	
-	print2D(matrix_A,MAT_LENGTH);
-	print2D(matrix_B,MAT_LENGTH);
-	print2D(matrix_C,MAT_LENGTH);
+
+	// print2D(matrix_A, MAT_LENGTH);
+	// print2D(matrix_B, MAT_LENGTH);
+	// print2D(matrix_C, MAT_LENGTH);
 
 	free(matrix_A);
 	free(matrix_B);
 	free(matrix_C);
-
-
 }
 
 void rank2TensorMultOpenMP()

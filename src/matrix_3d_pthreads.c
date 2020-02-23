@@ -3,10 +3,10 @@
 #include <pthread.h>
 #include "populate.h"
 
-#define NUM_THREADS 1
-#define MAT_LENGTH 5
-#define MAT_SQUARE MAT_LENGTH*MAT_LENGTH
-#define MAT_DEPTH 2
+int NUM_THREADS;
+int MAT_LENGTH;
+int MAT_SQUARE;
+int MAT_DEPTH;
 
 int **matrix_A;
 int **matrix_B;
@@ -19,11 +19,31 @@ struct IndexData
 };
 
 void rank3TensorMultPThreads();
-void *rank2TensorMultPThreads(void* arg);
+void *pThreadsPointer(void* arg);
+void rank2TensorMultPThreads();
 void indexMultiplication(int index, int depth);
 
-void main()
+void main(int argc, char* argv[])
 {
+	if(argc > 1)
+	{
+		NUM_THREADS = atoi(argv[1]);
+		MAT_LENGTH = atoi(argv[2]);
+		MAT_DEPTH = atoi(argv[2]);
+	}
+	else
+	{
+		printf("No thread count or matrix length entered.\n");
+		printf("The default values (threads = 1, length = 10)\n");
+		printf("will be used instead\n\n");
+		NUM_THREADS = 1;
+		MAT_LENGTH = 10;
+		MAT_DEPTH = 10;
+	}
+
+
+	MAT_SQUARE = MAT_LENGTH*MAT_LENGTH;
+	
 	matrix_A = (int **)malloc(MAT_DEPTH * sizeof(int*));
 	matrix_B = (int **)malloc(MAT_DEPTH * sizeof(int*));
 	matrix_C = (int **)malloc(MAT_DEPTH * sizeof(int*));
@@ -61,23 +81,10 @@ void main()
 void rank3TensorMultPThreads()
 {
 	for(int depth = 0; depth < MAT_DEPTH; depth ++)
-	{
-		pthread_t threads[NUM_THREADS];
-		struct IndexData data[NUM_THREADS];
-
-		for(int index = 0; index < NUM_THREADS; index ++)
-		{
-			data[index].thread_id = index;
-			data[index].depth = depth;
-			pthread_create(&threads[index], NULL, rank2TensorMultPThreads, &data[index]);
-		}
-
-		for (int index = 0; index < NUM_THREADS; index++)
-			pthread_join(threads[index], NULL);
-	}
+		rank2TensorMultPThreads(depth);
 }
 
-void *rank2TensorMultPThreads(void* arg)
+void *pThreadsPointer(void* arg)
 {
 	struct IndexData data = *((struct IndexData *)arg);
 	int thread_id = data.thread_id;
@@ -85,6 +92,22 @@ void *rank2TensorMultPThreads(void* arg)
 
 	for (int index = thread_id; index <= MAT_SQUARE; index += NUM_THREADS)
 		indexMultiplication(index, depth);
+}
+
+void rank2TensorMultPThreads(int depth)
+{
+	pthread_t threads[NUM_THREADS];
+	struct IndexData data[NUM_THREADS];
+
+	for(int index = 0; index < NUM_THREADS; index ++)
+	{
+		data[index].thread_id = index;
+		data[index].depth = depth;
+		pthread_create(&threads[index], NULL, pThreadsPointer, &data[index]);
+	}
+
+	for (int index = 0; index < NUM_THREADS; index++)
+		pthread_join(threads[index], NULL);
 }
 
 void indexMultiplication(int index, int depth)
