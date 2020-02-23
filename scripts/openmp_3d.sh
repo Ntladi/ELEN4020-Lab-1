@@ -20,6 +20,9 @@ echo "Computing a 10x10x10 matrix using OpenMP with 4 threads:"
 echo "Computing a 10x10x10 matrix using OpenMP with 8 threads:"
 { time ../executables/openmp_3d 8 10 ls -l >/dev/null; } 2>&1 | grep real
 
+echo "Computing a 10x10x10 matrix using OpenMP with 64 threads:"
+{ time ../executables/openmp_3d 64 10 ls -l >/dev/null; } 2>&1 | grep real
+
 # 20 x 20 matrix
 
 echo ""
@@ -35,6 +38,9 @@ echo "Computing a 20x20x20 matrix using OpenMP with 4 threads:"
 
 echo "Computing a 20x20x20 matrix using OpenMP with 8 threads:"
 { time ../executables/openmp_3d 8 20 ls -l >/dev/null; } 2>&1 | grep real
+
+echo "Computing a 20x20x20 matrix using OpenMP with 64 threads:"
+{ time ../executables/openmp_3d 64 20 ls -l >/dev/null; } 2>&1 | grep real
 
 # 30 x 30 threads
 
@@ -52,6 +58,9 @@ echo "Computing a 30x30x30 matrix using OpenMP with 4 threads:"
 echo "Computing a 30x30x30 matrix using OpenMP with 8 threads:"
 { time ../executables/openmp_3d 8 30 ls -l >/dev/null; } 2>&1 | grep real
 
+echo "Computing a 30x30x30 matrix using OpenMP with 64 threads:"
+{ time ../executables/openmp_3d 64 30 ls -l >/dev/null; } 2>&1 | grep real
+
 # 100 x 100 matrix
 
 echo ""
@@ -68,18 +77,24 @@ echo "Computing a 100x100x100 matrix using OpenMP with 4 thread:"
 echo "Computing a 100x100x100 matrix using OpenMP with 8 threads:"
 { time ../executables/openmp_3d 8 100 ls -l >/dev/null; } 2>&1 | grep real
 
-# 1000 x 1000 matrix
+echo "Computing a 100x100x100 matrix using OpenMP with 64 threads:"
+{ time ../executables/openmp_3d 64 100 ls -l >/dev/null; } 2>&1 | grep real
+
+# 250 x 250 matrix
 
 echo ""
 
-echo "Computing a 1000x1000x1000 matrix using OpenMP with 1 thread:"
-{ time ../executables/openmp_3d 1 1000 ls -l >/dev/null; } 2>&1 | grep real
+echo "Computing a 250x250x250 matrix using OpenMP with 1 thread:"
+{ time ../executables/openmp_3d 1 250 ls -l >/dev/null; } 2>&1 | grep real
 
-echo "Computing a 1000x1000x1000 matrix using OpenMP with 2 thread:"
-{ time ../executables/openmp_3d 2 1000 ls -l >/dev/null; } 2>&1 | grep real
+echo "Computing a 250x250x250 matrix using OpenMP with 2 thread:"
+{ time ../executables/openmp_3d 2 250 ls -l >/dev/null; } 2>&1 | grep real
 
-echo "Computing a 1000x1000x1000 matrix using OpenMP with 4 threads:"
-{ time ../executables/openmp_3d 4 1000 ls -l >/dev/null; } 2>&1 | grep real
+echo "Computing a 250x250x250 matrix using OpenMP with 4 threads:"
+{ time ../executables/openmp_3d 4 250 ls -l >/dev/null; } 2>&1 | grep real
 
-echo "Computing a 1000x1000x1000 matrix using OpenMP with 8 threads:"
-{ time ../executables/openmp_3d 8 1000 ls -l >/dev/null; } 2>&1 | grep real
+echo "Computing a 250x250x250 matrix using OpenMP with 8 threads:"
+{ time ../executables/openmp_3d 8 250 ls -l >/dev/null; } 2>&1 | grep real
+
+echo "Computing a 250x250x250 matrix using OpenMP with 64 threads:"
+{ time ../executables/openmp_3d 64 250 ls -l >/dev/null; } 2>&1 | grep real
