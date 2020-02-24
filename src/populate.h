@@ -14,8 +14,8 @@ void populate_2D(int *mat_A, int *mat_B, int length)
 {
 	for (int i = 0; i < length*length; ++i)
 	{
-		mat_A[i] = rand()%20;
-		mat_B[i] = rand()%20;
+		mat_A[i] = rand()%21;
+		mat_B[i] = rand()%21;
 	}
 }
 
