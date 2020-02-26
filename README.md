@@ -9,8 +9,8 @@ This lab is written in C and the code was tested on one of the DLab workstation 
 * GNU Make version 4.1 is used to compile the source code
 
 In order to produce the results, clone the repository and run the **compute.sh** script in the **scripts** folder.
-The script will compile all the source code located in the **src** folder
-One compiled the executable files can be found in the **executables** folder.
+The script will compile all the source code located in the **src** folder.
+Once compiled, the executable files can be found in the **executables** folder.
 The MakeFile can also be found in the **executables** folder
 Miscilanious scripts used to run the algorithm are found in the **scripts** folder.
 
